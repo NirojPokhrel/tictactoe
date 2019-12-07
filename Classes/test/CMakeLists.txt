@@ -1,6 +1,7 @@
 add_executable(unittest_exec
     ../GameUtil.cpp
     ../AI.cc
+    ../GameLogic.cc
     GameTest.cpp
     GameLogicTest.cpp
 )

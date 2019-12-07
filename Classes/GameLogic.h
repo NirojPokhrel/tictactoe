@@ -22,6 +22,9 @@ class GameLogic {
   util::MoveType Winner() const;
   bool IsGameDraw() const;
   void StopGame();
+  bool GameOver() const {
+    return game_over_;
+  }
 
   private:
     void RunGameLogic();
@@ -30,6 +33,7 @@ class GameLogic {
     game::IPlayer* p1_; // player 1
     game::IPlayer* p2_; // player 2
     std::atomic<bool> game_started_{false};
+    std::atomic<bool> game_over_{false};
     std::future<void> game_task_;
     const callback_type ui_callback_;
 };

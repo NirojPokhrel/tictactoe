@@ -1,4 +1,5 @@
 #include "GameLogic.h"
+#include <vector>
 
 using game::GameLogic;
 
@@ -12,14 +13,18 @@ void GameLogic::StartGame() {
 }
 
 void GameLogic::RunGameLogic() {
+  game::IPlayer *turn;
+  std::vector<game::IPlayer*> players{p1_, p2_};
+  int pos = 0;
+  turn = players[pos];
   while (game_started_) {
-    // player 1 turn
-    if (!MakeMove(p1_)) {
-      break;
-    }
-    // player 2 turn
-    if (!MakeMove(p2_)) {
-      break;
+    if (MakeMove(turn)) {
+      if (Winner() != util::MoveType::kEmpty) {
+        game_over_ = true;
+        break;
+      }
+      pos = (pos + 1) % 2;
+      turn = players[pos];
     }
   }
 }
@@ -37,7 +42,7 @@ bool GameLogic::MakeMove(game::IPlayer* player) {
       game_[position.first][position.second] != util::MoveType::kEmpty) {
     return false;
   }
-  ui_callback_(position.first, position.second, p1_->GetMoveType());
+  ui_callback_(position.first, position.second, player->GetMoveType());
   game_[position.first][position.second] = player->GetMoveType();
   return true;
 }
