@@ -1,10 +1,10 @@
 #pragma once
 
 #include "GameUtil.h"
+#include "Player.h"
 #include <atomic>
 #include <functional>
 #include <future>
-#include "Player.h"
 
 namespace game {
 using callback_type = std::function<void(uint8_t x, uint8_t y, util::MoveType move)>;
@@ -17,7 +17,7 @@ public:
   }
   void InitGame();
   void StartGame();
-  util::MoveType Winner() const;
+  util::MoveType Winner(util::VectorOfPairs* win_pos = nullptr) const;
   bool IsGameDraw() const;
   void StopGame();
   bool GameOver() const {

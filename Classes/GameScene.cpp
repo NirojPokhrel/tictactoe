@@ -79,20 +79,11 @@ void GameScene::InitGridRects() {
   auto grid_height = gridSprite->getBoundingBox().size.height / 3.0;
   auto min_x = gridSprite->getBoundingBox().getMinX();
   auto min_y = gridSprite->getBoundingBox().getMinY();
-  gridSpace[0][0] = Rect(min_x, min_y, grid_width, grid_height);
-  gridSpace[1][0] = Rect(min_x + grid_width, min_y, grid_width, grid_height);
-  gridSpace[2][0] =
-    Rect(min_x + 2 * grid_width, min_y, grid_width, grid_height);
-
-  gridSpace[0][1] = Rect(min_x, min_y + grid_height, grid_width, grid_height);
-  gridSpace[1][1] =
-    Rect(min_x + grid_width, min_y + grid_height, grid_width, grid_height);
-  gridSpace[2][1] = Rect(min_x + 2 * grid_width, min_y + grid_height, grid_width, grid_height);
-
-  gridSpace[0][2] =
-    Rect(min_x, min_y + 2 * grid_height, grid_width, grid_height);
-  gridSpace[1][2] = Rect(min_x + grid_width, min_y + 2 * grid_height, grid_width, grid_height);
-  gridSpace[2][2] = Rect(min_x + 2 * grid_width, min_y + 2 * grid_height, grid_width, grid_height);
+  for (auto i = 0; i < 3; ++i) {
+    for (auto j = 0; j < 3; ++j) {
+      gridSpace[i][j] = Rect(min_x + i * grid_width, min_y + j * grid_height, grid_width, grid_height);
+    }
+  }
 }
 
 void GameScene::InitGridPieces() {
@@ -139,7 +130,6 @@ void GameScene::UpdatePiece(uint8_t x, uint8_t y) {
 }
 
 void GameScene::CheckWin(int x, int y) {
-
   Check3PiecesForMatch({ { 0, 0 }, { 1, 0 }, { 2, 0 } });
   Check3PiecesForMatch({ { 0, 1 }, { 1, 1 }, { 2, 1 } });
   Check3PiecesForMatch({ { 0, 2 }, { 1, 2 }, { 2, 2 } });
@@ -183,23 +173,13 @@ void GameScene::Check3PiecesForMatch(
     }
 
     Sprite *winningPieces[3];
-    winningPieces[0] = Sprite::create(winningPieceStr.c_str());
-    winningPieces[0]->setPosition(
-      gridPieces[p0.first][p0.second]->getPosition());
-    winningPieces[0]->setOpacity(0);
-    this->addChild(winningPieces[0]);
-
-    winningPieces[1] = Sprite::create(winningPieceStr.c_str());
-    winningPieces[1]->setPosition(
-      gridPieces[p1.first][p1.second]->getPosition());
-    winningPieces[1]->setOpacity(0);
-    this->addChild(winningPieces[1]);
-
-    winningPieces[2] = Sprite::create(winningPieceStr.c_str());
-    winningPieces[2]->setPosition(
-      gridPieces[p2.first][p2.second]->getPosition());
-    winningPieces[2]->setOpacity(0);
-    this->addChild(winningPieces[2]);
+    for (auto i = 0; i < 3; ++i) {
+      winningPieces[i] = Sprite::create(winningPieceStr.c_str());
+      winningPieces[i]->setPosition(
+        gridPieces[threePoints[i].first][threePoints[i].second]->getPosition());
+      winningPieces[i]->setOpacity(0);
+      this->addChild(winningPieces[i]);
+    }
 
     winningPieces[0]->runAction(FadeIn::create(PIECE_FADE_IN_TIME));
     winningPieces[1]->runAction(

@@ -18,33 +18,50 @@ inline bool CheckForEquality(MoveType val1, MoveType val2, MoveType val3, MoveTy
   return false;
 }
 
+inline void SetWinningPosition(std::pair<int, int> &&p0, std::pair<int, int> &&p1, std::pair<int, int> &&p2, VectorOfPairs *win_pos) {
+  if (win_pos != nullptr) {
+    win_pos->push_back(p0);
+    win_pos->push_back(p1);
+    win_pos->push_back(p2);
+  }
+}
+
 
 MoveType IsGameOver(const util::board_type &game_board,
-  MoveType empty_type) {
+  MoveType empty_type,
+  VectorOfPairs *win_pos) {
   auto winner = empty_type;
   if (CheckForEquality(game_board[0][0], game_board[0][1], game_board[0][2], empty_type)) {
     winner = game_board[0][0];
+    SetWinningPosition({ 0, 0 }, { 0, 1 }, { 0, 2 }, win_pos);
   }
   if (CheckForEquality(game_board[1][0], game_board[1][1], game_board[1][2], empty_type)) {
     winner = game_board[1][0];
+    SetWinningPosition({ 1, 0 }, { 1, 1 }, { 1, 2 }, win_pos);
   }
   if (CheckForEquality(game_board[2][0], game_board[2][1], game_board[2][2], empty_type)) {
     winner = game_board[2][0];
+    SetWinningPosition({ 2, 0 }, { 2, 1 }, { 2, 2 }, win_pos);
   }
   if (CheckForEquality(game_board[0][0], game_board[1][0], game_board[2][0], empty_type)) {
     winner = game_board[0][0];
+    SetWinningPosition({ 0, 0 }, { 1, 0 }, { 2, 0 }, win_pos);
   }
   if (CheckForEquality(game_board[0][1], game_board[1][1], game_board[2][1], empty_type)) {
     winner = game_board[0][1];
+    SetWinningPosition({ 0, 1 }, { 1, 1 }, { 2, 1 }, win_pos);
   }
   if (CheckForEquality(game_board[0][2], game_board[1][2], game_board[2][2], empty_type)) {
     winner = game_board[0][2];
+    SetWinningPosition({ 0, 2 }, { 1, 2 }, { 2, 2 }, win_pos);
   }
   if (CheckForEquality(game_board[0][0], game_board[1][1], game_board[2][2], empty_type)) {
     winner = game_board[0][0];
+    SetWinningPosition({ 0, 0 }, { 1, 1 }, { 2, 2 }, win_pos);
   }
   if (CheckForEquality(game_board[0][2], game_board[1][1], game_board[2][0], empty_type)) {
     winner = game_board[0][2];
+    SetWinningPosition({ 0, 2 }, { 1, 1 }, { 2, 0 }, win_pos);
   }
   return winner;
 }

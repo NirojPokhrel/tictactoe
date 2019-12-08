@@ -46,8 +46,8 @@ bool GameLogic::MakeMove(game::IPlayer* player) {
   return true;
 }
 
-util::MoveType GameLogic::Winner() const {
-  return util::IsGameOver(game_, util::MoveType::kEmpty);
+util::MoveType GameLogic::Winner(util::VectorOfPairs* win_pos) const {
+  return util::IsGameOver(game_, util::MoveType::kEmpty, win_pos);
 }
 
 bool GameLogic::IsGameDraw() const {
