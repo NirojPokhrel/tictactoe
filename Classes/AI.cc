@@ -46,11 +46,10 @@ std::pair<int, int> AITicTacToe::FindNextPosition(util::board_type &arr) {
       }
     }
   }
-  return {max_x, max_y};
+  return { max_x, max_y };
 }
 
-int AITicTacToe::BuildGameTree(util::board_type &arr, bool maximizing_player,
-                               int depth) {
+int AITicTacToe::BuildGameTree(util::board_type &arr, bool maximizing_player, int depth) {
   // PrintBoard(arr);
   auto game_over = util::IsGameOver(arr, empty_);
   if (game_over != empty_) {
@@ -65,17 +64,14 @@ int AITicTacToe::BuildGameTree(util::board_type &arr, bool maximizing_player,
   }
   if (maximizing_player) {
     return TraverseBreadth(
-        arr, maximizing_player, [](int a, int b) { return std::max(a, b); },
-        depth);
+      arr, maximizing_player, [](int a, int b) { return std::max(a, b); }, depth);
   } else {
     return TraverseBreadth(
-        arr, maximizing_player, [](int a, int b) { return std::min(a, b); },
-        depth);
+      arr, maximizing_player, [](int a, int b) { return std::min(a, b); }, depth);
   }
 }
 
-int AITicTacToe::TraverseBreadth(util::board_type &arr, bool is_maximizing,
-                                 std::function<int(int, int)> func, int depth) {
+int AITicTacToe::TraverseBreadth(util::board_type &arr, bool is_maximizing, std::function<int(int, int)> func, int depth) {
   int value = is_maximizing ? -100 : 100;
   for (int i = 0; i < 3; ++i) {
     for (int j = 0; j < 3; ++j) {

@@ -4,8 +4,9 @@
 #include "GameUtil.h"
 
 namespace game {
-class IPlayer {
- public:
+class IPlayer
+{
+public:
   explicit IPlayer(util::MoveType move_type) : move_type_(move_type) {}
   virtual ~IPlayer() = default;
   virtual std::pair<int, int> FindNextPosition(util::board_type &arr) = 0;
@@ -14,7 +15,7 @@ class IPlayer {
     return move_type_;
   }
 
- protected:
+protected:
   const util::MoveType move_type_;
 };
-}
+}// namespace game

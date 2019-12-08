@@ -58,9 +58,9 @@ private:
   cocos2d::Sprite *gridPieces[3][3];
 
   util::board_type gameArray;
-  ai::AITicTacToe ai_ = ai::AITicTacToe(AI, PLAYER, EMPTY_PIECE);
+  ai::AITicTacToe ai_{ util::MoveType::kO, util::MoveType::kX, util::MoveType::kEmpty };
 
-  int turn;
+  util::MoveType turn;
 
   int gameState;
 };

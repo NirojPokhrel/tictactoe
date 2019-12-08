@@ -48,28 +48,28 @@ bool MainMenuScene::init() {
 
   auto sprite = Sprite::create(MAIN_MENU_BACKGROUND_FILEPATH);
   sprite->setPosition(this->getBoundingBox().getMidX(),
-                      this->getBoundingBox().getMidY());
+    this->getBoundingBox().getMidY());
 
   this->addChild(sprite, 0);
 
   auto sprite_title = Sprite::create(MAIN_MENU_TITLE_FILEPATH);
   sprite_title->setPosition(Vec2(screenSize.width / 2 + origin.x,
-                                 screenSize.height * 0.75 + origin.y));
+    screenSize.height * 0.75 + origin.y));
   this->addChild(sprite_title);
 
   auto playButton =
-      Button::create(MAIN_MENU_PLAY_BUTTON, MAIN_MENU_PLAY_BUTTON_PRESSED);
+    Button::create(MAIN_MENU_PLAY_BUTTON, MAIN_MENU_PLAY_BUTTON_PRESSED);
   playButton->setPosition(Vec2(this->getBoundingBox().getMidX(),
-                               this->getBoundingBox().getMidY() * 0.60));
+    this->getBoundingBox().getMidY() * 0.60));
   this->addChild(playButton);
 
   playButton->addTouchEventListener(
-      CC_CALLBACK_2(MainMenuScene::touchEvent, this));
+    CC_CALLBACK_2(MainMenuScene::touchEvent, this));
   playButton->setTag(TAG_MAIN_MENU_PLAY_BUTTON);
 
   auto playButtonOuter = Sprite::create(MAIN_MENU_PLAY_BUTTON_OUTER);
   playButtonOuter->setPosition(Vec2(this->getBoundingBox().getMidX(),
-                                    this->getBoundingBox().getMidY() * 0.60));
+    this->getBoundingBox().getMidY() * 0.60));
   this->addChild(playButtonOuter);
 
   return true;

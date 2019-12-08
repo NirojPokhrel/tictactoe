@@ -33,7 +33,8 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace ui;
 
-class MainMenuScene : public cocos2d::Layer {
+class MainMenuScene : public cocos2d::Layer
+{
 public:
   static cocos2d::Scene *createScene();
   virtual bool init() override;

@@ -13,8 +13,8 @@ void GameLogic::StartGame() {
 }
 
 void GameLogic::RunGameLogic() {
-  game::IPlayer *turn;
-  std::vector<game::IPlayer*> players{p1_, p2_};
+  game::IPlayer* turn;
+  std::vector<game::IPlayer*> players{ p1_, p2_ };
   int pos = 0;
   turn = players[pos];
   while (game_started_) {
@@ -38,8 +38,7 @@ void GameLogic::StopGame() {
 
 bool GameLogic::MakeMove(game::IPlayer* player) {
   auto position = player->FindNextPosition(game_);
-  if (position.first == -1 || position.second == -1 ||
-      game_[position.first][position.second] != util::MoveType::kEmpty) {
+  if (position.first == -1 || position.second == -1 || game_[position.first][position.second] != util::MoveType::kEmpty) {
     return false;
   }
   ui_callback_(position.first, position.second, player->GetMoveType());
@@ -53,5 +52,5 @@ util::MoveType GameLogic::Winner() const {
 
 bool GameLogic::IsGameDraw() const {
   return util::IsGameOver(game_, util::MoveType::kEmpty) == util::MoveType::kEmpty
-          && util::CheckIfFull(game_, util::MoveType::kEmpty);
+         && util::CheckIfFull(game_, util::MoveType::kEmpty);
 }

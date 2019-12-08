@@ -28,8 +28,7 @@
 
 USING_NS_CC;
 
-Scene *SplashScene::createScene()
-{
+Scene *SplashScene::createScene() {
   auto scene = cocos2d::Scene::create();
   auto layer = SplashScene::create();
   scene->addChild(layer);
@@ -38,20 +37,18 @@ Scene *SplashScene::createScene()
 }
 
 // Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char *filename)
-{
+static void problemLoading(const char *filename) {
   printf("Error while loading: %s\n", filename);
-  printf("Depending on how you compiled you might have to add 'Resources/' in "
-         "front of filenames in SplashSceneScene.cpp\n");
+  printf(
+    "Depending on how you compiled you might have to add 'Resources/' in "
+    "front of filenames in SplashSceneScene.cpp\n");
 }
 
 // on "init" you need to initialize your instance
-bool SplashScene::init()
-{
+bool SplashScene::init() {
   //////////////////////////////
   // 1. super init first
-  if (!Layer::init())
-  {
+  if (!Layer::init()) {
     return false;
   }
 
@@ -60,13 +57,12 @@ bool SplashScene::init()
 
   this->addChild(sprite, 0);
 
-  scheduleOnce(schedule_selector(SplashScene::SwitchToMainMenu), SPLASH_SCENE_SHOW_TIME);
+  scheduleOnce(CC_SCHEDULE_SELECTOR(SplashScene::SwitchToMainMenu), SPLASH_SCENE_SHOW_TIME);
 
   return true;
 }
 
-void SplashScene::SwitchToMainMenu(float dt)
-{
+void SplashScene::SwitchToMainMenu(float dt) {
   Scene *scene = MainMenuScene::createScene();
   TransitionFade *transition = TransitionFade::create(SCENE_TRANSITION_TIME, scene);
   Director::getInstance()->replaceScene(transition);
