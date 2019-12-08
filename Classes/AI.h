@@ -15,7 +15,7 @@ public:
   /// @param player - player id
   /// @param empty - empty id
   AITicTacToe(util::MoveType ai, util::MoveType player, util::MoveType empty)
-    : ai_(ai), player_(player), empty_(empty), game::IPlayer(ai) {}
+    : game::IPlayer(ai), ai_(ai), player_(player), empty_(empty) {}
 
   /// FindNextPosition - find the next move for AI from current game
   /// @param arr - Current game status
@@ -30,5 +30,6 @@ private:
   util::MoveType ai_;// identification for ai player in game array
   util::MoveType player_;// identification for human player
   util::MoveType empty_;// identification for empty position
+  static const uint8_t kDefaultValue = 255;
 };
 }// namespace ai

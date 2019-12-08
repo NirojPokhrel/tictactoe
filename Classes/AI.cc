@@ -1,17 +1,17 @@
 #include "AI.h"
+#include "GameUtil.h"
 #include <algorithm>
 #include <functional>
 #include <iostream>
-#include "GameUtil.h"
 
 using ai::AITicTacToe;
 
 std::pair<int, int> AITicTacToe::FindNextPosition(util::board_type &arr) {
   int value = -200;
-  int max_x = -1;
-  int max_y = -1;
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < 3; ++j) {
+  uint8_t max_x = kDefaultValue;
+  uint8_t max_y = kDefaultValue;
+  for (uint8_t i = 0; i < 3; ++i) {
+    for (uint8_t j = 0; j < 3; ++j) {
       if (arr[i][j] == empty_) {
         arr[i][j] = ai_;
         int current_value = BuildGameTree(arr, false, 0);
@@ -25,7 +25,7 @@ std::pair<int, int> AITicTacToe::FindNextPosition(util::board_type &arr) {
     }
   }
   bool is_losing_position = false;
-  if (max_x != -1 && max_y != -1) {
+  if (max_x != kDefaultValue && max_y != kDefaultValue) {
     arr[max_x][max_y] = player_;
     is_losing_position = util::IsGameOver(arr, empty_) != util::MoveType::kEmpty;
     arr[max_x][max_y] = empty_;
@@ -33,8 +33,8 @@ std::pair<int, int> AITicTacToe::FindNextPosition(util::board_type &arr) {
   if (value <= 0 && !is_losing_position) {
     // no best possible solution
     // find the position with maximum filling capacity
-    for (int i = 0; i < 3; ++i) {
-      for (int j = 0; j < 3; ++j) {
+    for (uint8_t i = 0; i < 3; ++i) {
+      for (uint8_t j = 0; j < 3; ++j) {
         if (arr[i][j] == empty_) {
           auto current_value = util::MaximumPossiblePath(arr, i, j, empty_);
           if (current_value > value) {
@@ -73,8 +73,8 @@ int AITicTacToe::BuildGameTree(util::board_type &arr, bool maximizing_player, in
 
 int AITicTacToe::TraverseBreadth(util::board_type &arr, bool is_maximizing, std::function<int(int, int)> func, int depth) {
   int value = is_maximizing ? -100 : 100;
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < 3; ++j) {
+  for (uint8_t i = 0; i < 3; ++i) {
+    for (uint8_t j = 0; j < 3; ++j) {
       if (arr[i][j] == empty_) {
         arr[i][j] = (is_maximizing ? ai_ : player_);
         value = func(value, BuildGameTree(arr, !is_maximizing, depth + 1));

@@ -4,8 +4,8 @@
 namespace util {
 
 void FillGameBoard(util::board_type &brd, MoveType init_item) {
-  for (auto i = 0; i < 3; ++i) {
-    for (auto j = 0; j < 3; ++j) {
+  for (uint8_t i = 0; i < 3; ++i) {
+    for (uint8_t j = 0; j < 3; ++j) {
       brd[i][j] = init_item;
     }
   }
@@ -67,8 +67,8 @@ MoveType IsGameOver(const util::board_type &game_board,
 }
 
 bool CheckIfFull(const board_type &game_board, MoveType empty_id) {
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < 3; ++j) {
+  for (uint8_t i = 0; i < 3; ++i) {
+    for (uint8_t j = 0; j < 3; ++j) {
       if (game_board[i][j] == empty_id) {
         return false;
       }
@@ -80,7 +80,8 @@ bool CheckIfFull(const board_type &game_board, MoveType empty_id) {
 inline int CheckHorizontal(const board_type &game_board, int x, int y, MoveType empty_id) {
   int empty_cell = 0;
   for (int i = -2; i <= 2; ++i) {
-    if ((x + i) >= 0 && (x + i) <= 2 && game_board[x + i][y] == empty_id) {
+    if ((x + i) >= 0 && (x + i) <= 2
+        && game_board[static_cast<unsigned long>(x + i)][static_cast<unsigned long>(y)] == empty_id) {
       empty_cell++;
     }
   }
@@ -90,7 +91,8 @@ inline int CheckHorizontal(const board_type &game_board, int x, int y, MoveType 
 inline int CheckVeritcal(const board_type &game_board, int x, int y, MoveType empty_id) {
   int empty_cell = 0;
   for (int i = -2; i <= 2; ++i) {
-    if ((y + i) >= 0 && (y + i) <= 2 && game_board[x][y + i] == empty_id) {
+    if ((y + i) >= 0 && (y + i) <= 2
+        && game_board[static_cast<unsigned long>(x)][static_cast<unsigned long>(y + i)] == empty_id) {
       empty_cell++;
     }
   }
@@ -100,7 +102,8 @@ inline int CheckVeritcal(const board_type &game_board, int x, int y, MoveType em
 inline int CheckDiagnoal(const board_type &game_board, int x, int y, MoveType empty_id) {
   int empty_cell = 0;
   for (int i = -2; i <= 2; ++i) {
-    if ((x + i) >= 0 && (x + i) <= 2 && (y + i) >= 0 && (y + i) <= 2 && game_board[x + i][y + i] == empty_id) {
+    if ((x + i) >= 0 && (x + i) <= 2 && (y + i) >= 0 && (y + i) <= 2
+        && game_board[static_cast<unsigned int>(x + i)][static_cast<unsigned int>(y + i)] == empty_id) {
       empty_cell++;
     }
   }
@@ -110,7 +113,8 @@ inline int CheckDiagnoal(const board_type &game_board, int x, int y, MoveType em
 inline int CheckRevDiagnoal(const board_type &game_board, int x, int y, MoveType empty_id) {
   int empty_cell = 0;
   for (int i = 0; i <= 5; ++i) {
-    if ((x + i - 2) >= 0 && (x + i - 2) <= 2 && (y - i + 2) >= 0 && (y - i + 2) <= 2 && game_board[x + i - 2][y - i + 2] == empty_id) {
+    if ((x + i - 2) >= 0 && (x + i - 2) <= 2 && (y - i + 2) >= 0 && (y - i + 2) <= 2
+        && game_board[static_cast<unsigned int>(x + i - 2)][static_cast<unsigned int>(y - i + 2)] == empty_id) {
       empty_cell++;
     }
   }
@@ -118,7 +122,7 @@ inline int CheckRevDiagnoal(const board_type &game_board, int x, int y, MoveType
 }
 
 uint8_t MaximumPossiblePath(const board_type &game_board, int x, int y, MoveType empty_id) {
-  int count = 0;
+  uint8_t count = 0;
   // check horizontal
   if (CheckHorizontal(game_board, x, y, empty_id) == 3) {
     count++;

@@ -29,6 +29,17 @@ set(APP_NAME tictactoe)
 
 project(${APP_NAME})
 
+########### Prepare only unittests ##################
+if (UNITTEST)
+    include (cmake/gmock_init.cmake)
+    include_directories (${GTEST_INCLUDE_DIRS})
+    include_directories (${GMOCK_INCLUDE_DIRS})
+    include_directories(${CMAKE_SOURCE_DIR}/Classes)
+    add_subdirectory(Classes/test)
+    return()
+endif()
+#####################################################
+
 set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 
@@ -161,12 +172,4 @@ endif()
 if(LINUX OR WINDOWS)
     cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
-endif()
-
-if (UNITTEST)
-    include (cmake/gmock_init.cmake)
-    include_directories (${GTEST_INCLUDE_DIRS})
-    include_directories (${GMOCK_INCLUDE_DIRS})
-    include_directories(${CMAKE_SOURCE_DIR}/Classes)
-    add_subdirectory(Classes/test)
 endif()
