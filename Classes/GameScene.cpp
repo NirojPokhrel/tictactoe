@@ -1,5 +1,5 @@
-#include "Definitions.h"
 #include "GameScene.h"
+#include "Definitions.h"
 
 USING_NS_CC;
 
@@ -39,10 +39,10 @@ bool GameScene::init() {
   InitGridRects();
   InitGridPieces();
 
-  util::FillGameBoard(gameArray, util::MoveType::kEmpty);
+  //util::FillGameBoard(gameArray, util::MoveType::kEmpty);
 
-  turn = util::MoveType::kX;
-  gameState = STATE_PLAYING;
+  //turn = util::MoveType::kX;
+  //gameState = STATE_PLAYING;
 
   auto listener = EventListenerTouchOneByOne::create();
   listener->setSwallowTouches(true);
@@ -55,7 +55,9 @@ bool GameScene::init() {
   Director::getInstance()
     ->getEventDispatcher()
     ->addEventListenerWithSceneGraphPriority(listener, this);
-
+  game_logic_.InitGame();
+  game_logic_.StartGame();
+  gameState = STATE_PLAYING;
   return true;
 }
 
@@ -105,19 +107,22 @@ void GameScene::CheckAndPlacePiece(cocos2d::Touch *touch) {
   Point touchPoint = touch->getLocation();
   for (int x = 0; x < 3; ++x) {
     for (int y = 0; y < 3; ++y) {
-      if (gridSpace[x][y].containsPoint(touchPoint)) {
-        if (util::MoveType::kEmpty == gameArray[x][y]) {
-          UpdatePiece(x, y);
-        }
+      if (gridSpace[x][y].containsPoint(touchPoint) && game_logic_.IsPositionEmpty(x, y)) {
+        human_.UpdatePosition(x, y);
       }
     }
   }
 }
 
-void GameScene::UpdatePiece(uint8_t x, uint8_t y) {
+void GameScene::UpdateUI(int x, int y, util::MoveType move) {
+  Director *dir = Director::getInstance();
+  Scheduler *sched = dir->getScheduler();
+  sched->performFunctionInCocosThread(std::bind(&GameScene::UpdateSprite, this, x, y, move));
+}
+
+void GameScene::UpdateSprite(int x, int y, util::MoveType move) {
   gameState = STATE_PLACING_PIECE;
-  gameArray[x][y] = turn;
-  if (util::MoveType::kX == turn) {
+  if (util::MoveType::kX == move) {
     gridPieces[x][y]->setTexture(X_PIECE_FILEPATH);
   } else {
     gridPieces[x][y]->setTexture(O_PIECE_FILEPATH);
@@ -125,70 +130,45 @@ void GameScene::UpdatePiece(uint8_t x, uint8_t y) {
   gridPieces[x][y]->setVisible(true);
   gridPieces[x][y]->runAction(Sequence::create(
     FadeIn::create(PIECE_FADE_IN_TIME),
-    CallFunc::create(std::bind(&GameScene::CheckWin, this, x, y)),
+    CallFunc::create(std::bind(&GameScene::CheckWin, this, move)),
     NULL));
 }
 
-void GameScene::CheckWin(int x, int y) {
-  Check3PiecesForMatch({ { 0, 0 }, { 1, 0 }, { 2, 0 } });
-  Check3PiecesForMatch({ { 0, 1 }, { 1, 1 }, { 2, 1 } });
-  Check3PiecesForMatch({ { 0, 2 }, { 1, 2 }, { 2, 2 } });
-  Check3PiecesForMatch({ { 0, 0 }, { 0, 1 }, { 0, 2 } });
-  Check3PiecesForMatch({ { 1, 0 }, { 1, 1 }, { 1, 2 } });
-  Check3PiecesForMatch({ { 2, 0 }, { 2, 1 }, { 2, 2 } });
-  Check3PiecesForMatch({ { 0, 0 }, { 1, 1 }, { 2, 2 } });
-  Check3PiecesForMatch({ { 0, 2 }, { 1, 1 }, { 2, 0 } });
-
-  if (util::MoveType::kX == turn) {
-    turn = util::MoveType::kO;
-  } else {
-    turn = util::MoveType::kX;
-  }
-  if (STATE_PLACING_PIECE == gameState) {
+void GameScene::CheckWin(util::MoveType move) {
+  util::VectorOfPairs win_pos;
+  const auto winner = game_logic_.Winner(&win_pos);
+  if (winner == util::MoveType::kEmpty) {
     gameState = STATE_PLAYING;
-  }
-
-  if (turn == util::MoveType::kX) {
     return;
   }
-  // next ai turn
-  auto pos = ai_.FindNextPosition(gameArray);
-  if (pos.first != -1 && pos.second != -1 && gameArray[pos.first][pos.second] == util::MoveType::kEmpty) {
-    UpdatePiece(pos.first, pos.second);
-  }
+  UpdateWinUI(win_pos, move);
 }
 
-void GameScene::Check3PiecesForMatch(
-  std::vector<std::pair<int, int>> threePoints) {
-  auto &p0 = threePoints[0];
-  auto &p1 = threePoints[1];
-  auto &p2 = threePoints[2];
-  if (turn == gameArray[p0.first][p0.second] && turn == gameArray[p1.first][p1.second] && turn == gameArray[p2.first][p2.second]) {
-    std::string winningPieceStr;
-    gameState = STATE_WON;
-    if (util::MoveType::kO == turn) {
-      winningPieceStr = O_WINNING_PIECE_FILEPATH;
-    } else {
-      winningPieceStr = X_WINNING_PIECE_FILEPATH;
-    }
-
-    Sprite *winningPieces[3];
-    for (auto i = 0; i < 3; ++i) {
-      winningPieces[i] = Sprite::create(winningPieceStr.c_str());
-      winningPieces[i]->setPosition(
-        gridPieces[threePoints[i].first][threePoints[i].second]->getPosition());
-      winningPieces[i]->setOpacity(0);
-      this->addChild(winningPieces[i]);
-    }
-
-    winningPieces[0]->runAction(FadeIn::create(PIECE_FADE_IN_TIME));
-    winningPieces[1]->runAction(
-      Sequence::create(DelayTime::create(PIECE_FADE_IN_TIME * 0.5),
-        FadeIn::create(PIECE_FADE_IN_TIME),
-        NULL));
-    winningPieces[2]->runAction(
-      Sequence::create(DelayTime::create(PIECE_FADE_IN_TIME * 0.5),
-        FadeIn::create(PIECE_FADE_IN_TIME),
-        NULL));
+void GameScene::UpdateWinUI(const util::VectorOfPairs &threePoints, util::MoveType move) {
+  std::string winningPieceStr;
+  gameState = STATE_WON;
+  if (util::MoveType::kO == move) {
+    winningPieceStr = O_WINNING_PIECE_FILEPATH;
+  } else {
+    winningPieceStr = X_WINNING_PIECE_FILEPATH;
   }
+
+  Sprite *winningPieces[3];
+  for (auto i = 0; i < 3; ++i) {
+    winningPieces[i] = Sprite::create(winningPieceStr.c_str());
+    winningPieces[i]->setPosition(
+      gridPieces[threePoints[i].first][threePoints[i].second]->getPosition());
+    winningPieces[i]->setOpacity(0);
+    this->addChild(winningPieces[i]);
+  }
+
+  winningPieces[0]->runAction(FadeIn::create(PIECE_FADE_IN_TIME));
+  winningPieces[1]->runAction(
+    Sequence::create(DelayTime::create(PIECE_FADE_IN_TIME * 0.5),
+      FadeIn::create(PIECE_FADE_IN_TIME),
+      NULL));
+  winningPieces[2]->runAction(
+    Sequence::create(DelayTime::create(PIECE_FADE_IN_TIME * 0.5),
+      FadeIn::create(PIECE_FADE_IN_TIME),
+      NULL));
 }

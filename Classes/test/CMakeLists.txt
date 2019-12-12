@@ -1,11 +1,13 @@
 add_library(logic_lib 
                 ../GameUtil.cpp
                 ../AI.cc
-                ../GameLogic.cc)
+                ../GameLogic.cc
+                ../HumanPlayer.cpp)
 
 add_executable(unittest_exec
     GameTest.cpp
     GameLogicTest.cpp
+    HumanPlayerTest.cpp
 )
 
 target_compile_options(logic_lib PRIVATE -Wall -Wextra -Wunused -Wuninitialized -Wmissing-noreturn -Wunreachable-code

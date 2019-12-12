@@ -70,6 +70,8 @@ list(APPEND GAME_SOURCE
      Classes/MainMenuScene.cpp
      Classes/AI.cc 
      Classes/GameUtil.cpp
+     Classes/HumanPlayer.cpp
+     Classes/GameLogic.cc
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
@@ -78,6 +80,8 @@ list(APPEND GAME_HEADER
      Classes/MainMenuScene.h
      Classes/AI.h
      Classes/GameUtil.h
+     Classes/HumanPlayer.h
+     Classes/GameLogic.h
      )
 
 if(ANDROID)

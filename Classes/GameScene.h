@@ -23,10 +23,12 @@
  ****************************************************************************/
 #pragma once
 
-#include "cocos2d.h"
-#include "GameUtil.h"
 #include "AI.h"
 #include "Definitions.h"
+#include "GameLogic.h"
+#include "GameUtil.h"
+#include "HumanPlayer.h"
+#include "cocos2d.h"
 #include <string>
 #include <utility>
 #include <vector>
@@ -34,10 +36,14 @@
 class GameScene : public cocos2d::Layer
 {
 public:
+  GameScene()
+    : game_logic_(&human_, &ai_, std::bind(&GameScene::UpdateUI, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)) {
+  }
   static cocos2d::Scene *createScene();
   virtual bool init() override;
   // implement the "static create()" method manually
   CREATE_FUNC(GameScene);
+  void UpdateUI(int x, int y, util::MoveType move);
 
 private:
   bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
@@ -49,9 +55,9 @@ private:
   void InitGridPieces();
 
   void CheckAndPlacePiece(cocos2d::Touch *touch);
-  void CheckWin(int x, int y);
-  void Check3PiecesForMatch(std::vector<std::pair<int, int>> threePoints);
-  void UpdatePiece(uint8_t x, uint8_t y);
+  void CheckWin(util::MoveType move);
+  void UpdateWinUI(const util::VectorOfPairs &threePoints, util::MoveType move);
+  void UpdateSprite(int x, int y, util::MoveType move);
 
   cocos2d::Sprite *gridSprite;
   cocos2d::Rect gridSpace[3][3];
@@ -59,7 +65,8 @@ private:
 
   util::board_type gameArray;
   ai::AITicTacToe ai_{ util::MoveType::kO, util::MoveType::kX, util::MoveType::kEmpty };
-
+  game::HumanPlayer human_{ util::MoveType::kX };
+  game::GameLogic game_logic_;
   util::MoveType turn;
 
   int gameState;

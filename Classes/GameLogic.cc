@@ -19,7 +19,7 @@ void GameLogic::RunGameLogic() {
   turn = players[pos];
   while (game_started_) {
     if (MakeMove(turn)) {
-      if (Winner() != util::MoveType::kEmpty) {
+      if (Winner() != util::MoveType::kEmpty || IsGameDraw()) {
         game_over_ = true;
         break;
       }
@@ -53,4 +53,8 @@ util::MoveType GameLogic::Winner(util::VectorOfPairs* win_pos) const {
 bool GameLogic::IsGameDraw() const {
   return util::IsGameOver(game_, util::MoveType::kEmpty) == util::MoveType::kEmpty
          && util::CheckIfFull(game_, util::MoveType::kEmpty);
+}
+
+bool GameLogic::IsPositionEmpty(int x, int y) const {
+  return game_[static_cast<uint8_t>(x)][static_cast<uint8_t>(y)] == util::MoveType::kEmpty;
 }

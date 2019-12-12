@@ -23,6 +23,7 @@ public:
   bool GameOver() const {
     return game_over_;
   }
+  bool IsPositionEmpty(int x, int y) const;
 
 private:
   void RunGameLogic();
