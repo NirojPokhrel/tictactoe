@@ -26,6 +26,7 @@
 #include "AI.h"
 #include "Definitions.h"
 #include "GameLogic.h"
+#include "GameOver.h"
 #include "GameUtil.h"
 #include "HumanPlayer.h"
 #include "cocos2d.h"
@@ -67,6 +68,7 @@ private:
   ai::AITicTacToe ai_{ util::MoveType::kO, util::MoveType::kX, util::MoveType::kEmpty };
   game::HumanPlayer human_{ util::MoveType::kX };
   game::GameLogic game_logic_;
+  game_scene::GameOver *game_over_;
   util::MoveType turn;
 
   int gameState;

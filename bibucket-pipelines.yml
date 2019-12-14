@@ -6,6 +6,19 @@
 image: gcc:6.5
 
 pipelines:
+  deafults:
+    - step:
+      script:
+        - uname -a
+        - gcc --version
+        - apt-get update -qq
+        - apt-get install cmake -y
+        - cmake --version
+        - mkdir build
+        - cd build
+        - cmake .. -DUNITTEST=1
+        - make
+        - ./Classes/test/unitest_exec
   pull-requests:
     '**':
       - step:

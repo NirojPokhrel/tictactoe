@@ -39,10 +39,7 @@ bool GameScene::init() {
   InitGridRects();
   InitGridPieces();
 
-  //util::FillGameBoard(gameArray, util::MoveType::kEmpty);
-
-  //turn = util::MoveType::kX;
-  //gameState = STATE_PLAYING;
+  game_over_ = new game_scene::GameOver(this);
 
   auto listener = EventListenerTouchOneByOne::create();
   listener->setSwallowTouches(true);
@@ -137,11 +134,16 @@ void GameScene::UpdateSprite(int x, int y, util::MoveType move) {
 void GameScene::CheckWin(util::MoveType move) {
   util::VectorOfPairs win_pos;
   const auto winner = game_logic_.Winner(&win_pos);
-  if (winner == util::MoveType::kEmpty) {
+  if (winner != util::MoveType::kEmpty) {
+    UpdateWinUI(win_pos, move);
+  } else if (game_logic_.IsGameDraw()) {
+    gameState = STATE_DRAW;
+  } else {
     gameState = STATE_PLAYING;
-    return;
   }
-  UpdateWinUI(win_pos, move);
+  if (gameState != STATE_PLAYING) {
+    game_over_->ShowGameOver(this);
+  }
 }
 
 void GameScene::UpdateWinUI(const util::VectorOfPairs &threePoints, util::MoveType move) {

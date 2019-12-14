@@ -72,6 +72,7 @@ list(APPEND GAME_SOURCE
      Classes/GameUtil.cpp
      Classes/HumanPlayer.cpp
      Classes/GameLogic.cc
+     Classes/GameOver.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
@@ -82,6 +83,7 @@ list(APPEND GAME_HEADER
      Classes/GameUtil.h
      Classes/HumanPlayer.h
      Classes/GameLogic.h
+     Classes/GameOver.h
      )
 
 if(ANDROID)
