@@ -31,9 +31,6 @@ void GameLogic::RunGameLogic() {
 
 void GameLogic::StopGame() {
   game_started_ = false;
-  if (game_task_.valid()) {
-    game_task_.get();
-  }
 }
 
 bool GameLogic::MakeMove(game::IPlayer* player) {

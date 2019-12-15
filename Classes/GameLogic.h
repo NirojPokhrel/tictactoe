@@ -14,6 +14,9 @@ public:
   GameLogic(game::IPlayer* p1, game::IPlayer* p2, callback_type ui_callback) : p1_(p1), p2_(p2), ui_callback_(ui_callback) {}
   ~GameLogic() {
     StopGame();
+    if (game_task_.valid()) {
+      game_task_.get();
+    }
   }
   void InitGame();
   void StartGame();

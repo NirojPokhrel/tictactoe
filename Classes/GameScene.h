@@ -40,6 +40,10 @@ public:
   GameScene()
     : game_logic_(&human_, &ai_, std::bind(&GameScene::UpdateUI, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)) {
   }
+  ~GameScene() {
+    game_logic_.StopGame();
+    human_.InterruptGame();
+  }
   static cocos2d::Scene *createScene();
   virtual bool init() override;
   // implement the "static create()" method manually

@@ -39,7 +39,6 @@ bool GameScene::init() {
   InitGridRects();
   InitGridPieces();
 
-  game_over_ = new game_scene::GameOver(this);
 
   auto listener = EventListenerTouchOneByOne::create();
   listener->setSwallowTouches(true);
@@ -52,9 +51,10 @@ bool GameScene::init() {
   Director::getInstance()
     ->getEventDispatcher()
     ->addEventListenerWithSceneGraphPriority(listener, this);
+  gameState = STATE_PLAYING;
+  game_over_ = new game_scene::GameOver(this, gameState);
   game_logic_.InitGame();
   game_logic_.StartGame();
-  gameState = STATE_PLAYING;
   return true;
 }
 

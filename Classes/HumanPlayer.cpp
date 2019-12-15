@@ -4,7 +4,7 @@ using game::HumanPlayer;
 
 std::pair<int, int> HumanPlayer::FindNextPosition(util::board_type &arr) {
   std::unique_lock<std::mutex> ulk(mtx_);
-  cv_.wait(ulk, [this]() { return selected_point_.first != -1; });
+  cv_.wait(ulk, [this]() { return selected_point_.first != -1 || stop_game_; });
   auto res = selected_point_;
   selected_point_.first = -1;
   selected_point_.second = -1;

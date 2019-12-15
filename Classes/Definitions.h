@@ -18,12 +18,18 @@
 #define RETRY_BUTTON_PRESSED "res/Retry Button.png"
 #define HOME_BUTTON "res/Home Button.png"
 #define HOME_BUTTON_PRESSED "res/Home Button.png"
+#define PAUSE_BUTTON "res/Pause Button.png"
+#define PAUSE_BUTTON_PRESSED "res/Pause Button.png"
+#define RESUME_BUTTON "res/Resume Button.png"
+#define RESUME_BUTTON_PRESSED "res/Resume Button.png"
 
 #define ACHIEVEMENTS_BUTTON "res/Achievements.png"
 #define ACHIEVEMENTS_BUTTON_PRESSED "res/Achievements.png"
 #define MAIN_MENU_PLAY_BUTTON_OUTER "res/Play Button Outer.png"
 #define GAME_OVER_BACKGROUND "res/Pause Background.png"
 #define GAME_OVER_WINDOW "res/Pause Window.png"
+#define PAUSE_BACKGROUND "res/Pause Background.png"
+#define PAUSE_WINDOW "res/Pause Window.png"
 
 #define TAG_MAIN_MENU_PLAY_BUTTON 0
 #define TAG_ACHIEVEMENT_BUTTON 1
@@ -50,4 +56,5 @@
 
 #define PIECE_FADE_IN_TIME 0.5
 #define GAME_OVER_BACKGROUND_FADE_IN_TIME 0.5
+#define PAUSE_BACKGROUND_FADE_IN_TIME 0.5
 #define MENU_MOVE_BOUNCE_DURATION 1.5
