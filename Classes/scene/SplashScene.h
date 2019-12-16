@@ -2,6 +2,7 @@
 
 #include "cocos2d.h"
 
+namespace game_scene {
 class SplashScene : public cocos2d::Layer
 {
 public:
@@ -14,3 +15,4 @@ private:
   void SwitchToMainMenu(float dt);
   cocos2d::Sprite *sprite;
 };
+}// namespace game_scene

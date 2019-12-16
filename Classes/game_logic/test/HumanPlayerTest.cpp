@@ -4,18 +4,18 @@
 #include <gtest/gtest.h>
 
 TEST(HumanPlayer, TestSendingUpdateFirst) {
-  game::HumanPlayer player(util::MoveType::kX);
+  game_logic::HumanPlayer player(game_logic::MoveType::kX);
 
   player.UpdatePosition(3, 4);
-  util::board_type brd;
+  game_logic::board_type brd;
   auto pos = player.FindNextPosition(brd);
   EXPECT_EQ(pos, std::make_pair(3, 4));
 }
 
 TEST(HumanPlayer, WaitForEvent) {
-  game::HumanPlayer player(util::MoveType::kX);
+  game_logic::HumanPlayer player(game_logic::MoveType::kX);
   auto fut = std::async(std::launch::async, [&]() {
-    util::board_type brd;
+    game_logic::board_type brd;
     return player.FindNextPosition(brd);
   });
   std::this_thread::yield();

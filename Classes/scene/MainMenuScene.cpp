@@ -3,6 +3,7 @@
 #include "GameScene.h"
 
 USING_NS_CC;
+using game_scene::MainMenuScene;
 
 Scene *MainMenuScene::createScene() {
   auto scene = cocos2d::Scene::create();
@@ -22,19 +23,19 @@ bool MainMenuScene::init() {
   Size screenSize = Director::getInstance()->getVisibleSize();
   Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-  auto sprite = Sprite::create(MAIN_MENU_BACKGROUND_FILEPATH);
+  auto sprite = Sprite::create(constants::kMainMenuBackgroundFilepath);
   sprite->setPosition(this->getBoundingBox().getMidX(),
     this->getBoundingBox().getMidY());
 
   this->addChild(sprite, 0);
 
-  auto sprite_title = Sprite::create(MAIN_MENU_TITLE_FILEPATH);
+  auto sprite_title = Sprite::create(constants::kMainMenuTitleFielpath);
   sprite_title->setPosition(Vec2(screenSize.width / 2 + origin.x,
     screenSize.height * 0.75 + origin.y));
   this->addChild(sprite_title);
 
   auto playButton =
-    Button::create(MAIN_MENU_PLAY_BUTTON, MAIN_MENU_PLAY_BUTTON_PRESSED);
+    Button::create(constants::kMainMenuPlayButton, constants::kMainMenuPlayButtonPressed);
   playButton->setPosition(Vec2(
     this->getBoundingBox().getMidX(),
     this->getBoundingBox().getMidY() * 0.60));
@@ -42,9 +43,8 @@ bool MainMenuScene::init() {
 
   playButton->addTouchEventListener(
     CC_CALLBACK_2(MainMenuScene::touchEvent, this));
-  playButton->setTag(TAG_MAIN_MENU_PLAY_BUTTON);
 
-  auto playButtonOuter = Sprite::create(MAIN_MENU_PLAY_BUTTON_OUTER);
+  auto playButtonOuter = Sprite::create(constants::kMainMenuPlayButtonOuter);
   playButtonOuter->setPosition(Vec2(this->getBoundingBox().getMidX(),
     this->getBoundingBox().getMidY() * 0.60));
   this->addChild(playButtonOuter);
@@ -64,8 +64,8 @@ void MainMenuScene::touchEvent(Ref *sender, Widget::TouchEventType type) {
     break;
   }
   case Widget::TouchEventType::ENDED: {
-    auto scene = GameScene::createScene();
-    auto transitionFade = TransitionFade::create(SCENE_TRANSITION_TIME, scene);
+    auto scene = game_scene::GameScene::createScene();
+    auto transitionFade = TransitionFade::create(constants::kSceneTransitionTime, scene);
     Director::getInstance()->replaceScene(scene);
     break;
   }

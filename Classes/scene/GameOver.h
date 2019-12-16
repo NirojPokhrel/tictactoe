@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Definitions.h"
 #include "cocos2d.h"
 
 namespace game_scene {
 class GameOver
 {
 public:
-  GameOver(cocos2d::Layer* layer, int& gameState);
+  GameOver(cocos2d::Layer* layer, constants::GameState& gameState);
   void ShowGameOver(cocos2d::Layer* layer);
 
 private:
@@ -14,7 +15,7 @@ private:
   void GoToMainMenu(cocos2d::Ref* pSender);
   void PauseGame(cocos2d::Ref* pSender);
 
-  int* gameState;
+  constants::GameState* gameState;
 
   cocos2d::Menu* pauseMenu;
   cocos2d::Sprite* pauseBackground;

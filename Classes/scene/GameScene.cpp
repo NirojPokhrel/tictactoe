@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "Definitions.h"
 
+using game_scene::GameScene;
 USING_NS_CC;
 
 Scene *GameScene::createScene() {
@@ -27,12 +28,12 @@ bool GameScene::init() {
     return false;
   }
 
-  auto sprite = Sprite::create(GAME_SCENE_BACKGROUND_FILEPATH);
+  auto sprite = Sprite::create(constants::kGameSceneBackgroundFilepath);
   sprite->setPosition(this->getBoundingBox().getMidX(),
     this->getBoundingBox().getMidY());
 
   this->addChild(sprite, 0);
-  gridSprite = Sprite::create(GRID_FILEPATH);
+  gridSprite = Sprite::create(constants::kGridFilepath);
   gridSprite->setPosition(
     Vec2(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY()));
   this->addChild(gridSprite);
@@ -51,7 +52,7 @@ bool GameScene::init() {
   Director::getInstance()
     ->getEventDispatcher()
     ->addEventListenerWithSceneGraphPriority(listener, this);
-  gameState = STATE_PLAYING;
+  gameState = constants::GameState::kStatePlaying;
   game_over_ = new game_scene::GameOver(this, gameState);
   game_logic_.InitGame();
   game_logic_.StartGame();
@@ -65,7 +66,7 @@ bool GameScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event) {
 void GameScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event) {}
 
 void GameScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event) {
-  if (STATE_PLAYING == gameState) {
+  if (constants::GameState::kStatePlaying == gameState) {
     CheckAndPlacePiece(touch);
   }
 }
@@ -88,7 +89,7 @@ void GameScene::InitGridRects() {
 void GameScene::InitGridPieces() {
   for (int x = 0; x < 3; ++x) {
     for (int y = 0; y < 3; ++y) {
-      gridPieces[x][y] = Sprite::create(X_PIECE_FILEPATH);
+      gridPieces[x][y] = Sprite::create(constants::kXPieceFilepath);
       gridPieces[x][y]->setPosition(
         Vec2(gridSprite->getPositionX() + (gridPieces[x][y]->getContentSize().width * (x - 1)),
           gridSprite->getPositionY() + (gridPieces[x][y]->getContentSize().height * (y - 1))));
@@ -111,48 +112,48 @@ void GameScene::CheckAndPlacePiece(cocos2d::Touch *touch) {
   }
 }
 
-void GameScene::UpdateUI(int x, int y, util::MoveType move) {
+void GameScene::UpdateUI(int x, int y, game_logic::MoveType move) {
   Director *dir = Director::getInstance();
   Scheduler *sched = dir->getScheduler();
   sched->performFunctionInCocosThread(std::bind(&GameScene::UpdateSprite, this, x, y, move));
 }
 
-void GameScene::UpdateSprite(int x, int y, util::MoveType move) {
-  gameState = STATE_PLACING_PIECE;
-  if (util::MoveType::kX == move) {
-    gridPieces[x][y]->setTexture(X_PIECE_FILEPATH);
+void GameScene::UpdateSprite(int x, int y, game_logic::MoveType move) {
+  gameState = constants::GameState::kStatePlacingPiece;
+  if (game_logic::MoveType::kX == move) {
+    gridPieces[x][y]->setTexture(constants::kXPieceFilepath);
   } else {
-    gridPieces[x][y]->setTexture(O_PIECE_FILEPATH);
+    gridPieces[x][y]->setTexture(constants::kOPieceFilepath);
   }
   gridPieces[x][y]->setVisible(true);
   gridPieces[x][y]->runAction(Sequence::create(
-    FadeIn::create(PIECE_FADE_IN_TIME),
+    FadeIn::create(constants::kPieceFadeInTime),
     CallFunc::create(std::bind(&GameScene::CheckWin, this, move)),
     NULL));
 }
 
-void GameScene::CheckWin(util::MoveType move) {
-  util::VectorOfPairs win_pos;
+void GameScene::CheckWin(game_logic::MoveType move) {
+  game_logic::VectorOfPairs win_pos;
   const auto winner = game_logic_.Winner(&win_pos);
-  if (winner != util::MoveType::kEmpty) {
+  if (winner != game_logic::MoveType::kEmpty) {
     UpdateWinUI(win_pos, move);
   } else if (game_logic_.IsGameDraw()) {
-    gameState = STATE_DRAW;
+    gameState = constants::GameState::kStateDraw;
   } else {
-    gameState = STATE_PLAYING;
+    gameState = constants::GameState::kStatePlaying;
   }
-  if (gameState != STATE_PLAYING) {
+  if (gameState != constants::GameState::kStatePlaying) {
     game_over_->ShowGameOver(this);
   }
 }
 
-void GameScene::UpdateWinUI(const util::VectorOfPairs &threePoints, util::MoveType move) {
+void GameScene::UpdateWinUI(const game_logic::VectorOfPairs &threePoints, game_logic::MoveType move) {
   std::string winningPieceStr;
-  gameState = STATE_WON;
-  if (util::MoveType::kO == move) {
-    winningPieceStr = O_WINNING_PIECE_FILEPATH;
+  gameState = constants::GameState::kStateWon;
+  if (game_logic::MoveType::kO == move) {
+    winningPieceStr = constants::kOWinningPieceFilepath;
   } else {
-    winningPieceStr = X_WINNING_PIECE_FILEPATH;
+    winningPieceStr = constants::kXWinningPieceFilepath;
   }
 
   Sprite *winningPieces[3];
@@ -164,13 +165,13 @@ void GameScene::UpdateWinUI(const util::VectorOfPairs &threePoints, util::MoveTy
     this->addChild(winningPieces[i]);
   }
 
-  winningPieces[0]->runAction(FadeIn::create(PIECE_FADE_IN_TIME));
+  winningPieces[0]->runAction(FadeIn::create(constants::kPieceFadeInTime));
   winningPieces[1]->runAction(
-    Sequence::create(DelayTime::create(PIECE_FADE_IN_TIME * 0.5),
-      FadeIn::create(PIECE_FADE_IN_TIME),
+    Sequence::create(DelayTime::create(constants::kPieceFadeInTime * 0.5),
+      FadeIn::create(constants::kPieceFadeInTime),
       NULL));
   winningPieces[2]->runAction(
-    Sequence::create(DelayTime::create(PIECE_FADE_IN_TIME * 0.5),
-      FadeIn::create(PIECE_FADE_IN_TIME),
+    Sequence::create(DelayTime::create(constants::kPieceFadeInTime * 0.5),
+      FadeIn::create(constants::kPieceFadeInTime),
       NULL));
 }

@@ -3,6 +3,7 @@
 #include "MainMenuScene.h"
 
 USING_NS_CC;
+using game_scene::SplashScene;
 
 Scene *SplashScene::createScene() {
   auto scene = cocos2d::Scene::create();
@@ -28,18 +29,18 @@ bool SplashScene::init() {
     return false;
   }
 
-  auto sprite = Sprite::create(SPLASH_SCENE_BACKGROUND_FILEPATH);
+  auto sprite = Sprite::create(constants::kSplashSceneBackgroundFilepath);
   sprite->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
 
   this->addChild(sprite, 0);
 
-  scheduleOnce(CC_SCHEDULE_SELECTOR(SplashScene::SwitchToMainMenu), SPLASH_SCENE_SHOW_TIME);
+  scheduleOnce(CC_SCHEDULE_SELECTOR(SplashScene::SwitchToMainMenu), constants::kSplashSceneShowTime);
 
   return true;
 }
 
 void SplashScene::SwitchToMainMenu(float dt) {
   Scene *scene = MainMenuScene::createScene();
-  TransitionFade *transition = TransitionFade::create(SCENE_TRANSITION_TIME, scene);
+  TransitionFade *transition = TransitionFade::create(constants::kSceneTransitionTime, scene);
   Director::getInstance()->replaceScene(transition);
 }

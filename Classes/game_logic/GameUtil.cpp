@@ -1,9 +1,9 @@
 #include "GameUtil.h"
 
 
-namespace util {
+namespace game_logic {
 
-void FillGameBoard(util::board_type &brd, MoveType init_item) {
+void FillGameBoard(game_logic::board_type &brd, MoveType init_item) {
   for (uint8_t i = 0; i < 3; ++i) {
     for (uint8_t j = 0; j < 3; ++j) {
       brd[i][j] = init_item;
@@ -27,7 +27,7 @@ inline void SetWinningPosition(std::pair<int, int> &&p0, std::pair<int, int> &&p
 }
 
 
-MoveType IsGameOver(const util::board_type &game_board,
+MoveType IsGameOver(const game_logic::board_type &game_board,
   MoveType empty_type,
   VectorOfPairs *win_pos) {
   auto winner = empty_type;
@@ -141,4 +141,4 @@ uint8_t MaximumPossiblePath(const board_type &game_board, int x, int y, MoveType
   }
   return count;
 }
-}// namespace util
+}// namespace game_logic

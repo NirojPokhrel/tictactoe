@@ -34,8 +34,8 @@ if (UNITTEST)
     include (cmake/gmock_init.cmake)
     include_directories (${GTEST_INCLUDE_DIRS})
     include_directories (${GMOCK_INCLUDE_DIRS})
-    include_directories(${CMAKE_SOURCE_DIR}/Classes)
-    add_subdirectory(Classes/test)
+    include_directories(${CMAKE_SOURCE_DIR}/Classes/game_logic)
+    add_subdirectory(Classes/game_logic/test)
     return()
 endif()
 #####################################################
@@ -65,25 +65,25 @@ endif()
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
-     Classes/SplashScene.cpp
-     Classes/GameScene.cpp
-     Classes/MainMenuScene.cpp
-     Classes/AI.cc 
-     Classes/GameUtil.cpp
-     Classes/HumanPlayer.cpp
-     Classes/GameLogic.cc
-     Classes/GameOver.cpp
+     Classes/scene/SplashScene.cpp
+     Classes/scene/GameScene.cpp
+     Classes/scene/MainMenuScene.cpp
+     Classes/scene/GameOver.cpp
+     Classes/game_logic/AI.cc 
+     Classes/game_logic/GameUtil.cpp
+     Classes/game_logic/HumanPlayer.cpp
+     Classes/game_logic/GameLogic.cc
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/SplashScene.h
-     Classes/GameScene.h 
-     Classes/MainMenuScene.h
-     Classes/AI.h
-     Classes/GameUtil.h
-     Classes/HumanPlayer.h
-     Classes/GameLogic.h
-     Classes/GameOver.h
+     Classes/scene/SplashScene.h
+     Classes/scene/GameScene.h 
+     Classes/scene/MainMenuScene.h
+     Classes/scene/GameOver.h
+     Classes/game_logic/AI.h
+     Classes/game_logic/GameUtil.h
+     Classes/game_logic/HumanPlayer.h
+     Classes/game_logic/GameLogic.h
      )
 
 if(ANDROID)

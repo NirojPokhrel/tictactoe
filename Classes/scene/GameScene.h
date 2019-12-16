@@ -23,17 +23,18 @@
  ****************************************************************************/
 #pragma once
 
-#include "AI.h"
 #include "Definitions.h"
-#include "GameLogic.h"
 #include "GameOver.h"
-#include "GameUtil.h"
-#include "HumanPlayer.h"
 #include "cocos2d.h"
+#include "game_logic/AI.h"
+#include "game_logic/GameLogic.h"
+#include "game_logic/GameUtil.h"
+#include "game_logic/HumanPlayer.h"
 #include <string>
 #include <utility>
 #include <vector>
 
+namespace game_scene {
 class GameScene : public cocos2d::Layer
 {
 public:
@@ -48,7 +49,7 @@ public:
   virtual bool init() override;
   // implement the "static create()" method manually
   CREATE_FUNC(GameScene);
-  void UpdateUI(int x, int y, util::MoveType move);
+  void UpdateUI(int x, int y, game_logic::MoveType move);
 
 private:
   bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
@@ -60,20 +61,21 @@ private:
   void InitGridPieces();
 
   void CheckAndPlacePiece(cocos2d::Touch *touch);
-  void CheckWin(util::MoveType move);
-  void UpdateWinUI(const util::VectorOfPairs &threePoints, util::MoveType move);
-  void UpdateSprite(int x, int y, util::MoveType move);
+  void CheckWin(game_logic::MoveType move);
+  void UpdateWinUI(const game_logic::VectorOfPairs &threePoints, game_logic::MoveType move);
+  void UpdateSprite(int x, int y, game_logic::MoveType move);
 
   cocos2d::Sprite *gridSprite;
   cocos2d::Rect gridSpace[3][3];
   cocos2d::Sprite *gridPieces[3][3];
 
-  util::board_type gameArray;
-  ai::AITicTacToe ai_{ util::MoveType::kO, util::MoveType::kX, util::MoveType::kEmpty };
-  game::HumanPlayer human_{ util::MoveType::kX };
-  game::GameLogic game_logic_;
+  game_logic::board_type gameArray;
+  game_logic::AITicTacToe ai_{ game_logic::MoveType::kO, game_logic::MoveType::kX, game_logic::MoveType::kEmpty };
+  game_logic::HumanPlayer human_{ game_logic::MoveType::kX };
+  game_logic::GameLogic game_logic_;
   game_scene::GameOver *game_over_;
-  util::MoveType turn;
+  game_logic::MoveType turn;
 
-  int gameState;
+  constants::GameState gameState;
 };
+}// namespace game_scene

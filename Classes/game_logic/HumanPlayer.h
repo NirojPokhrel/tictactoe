@@ -8,17 +8,17 @@
 #include <mutex>
 #include <utility>
 
-namespace game {
-class HumanPlayer : public game::IPlayer
+namespace game_logic {
+class HumanPlayer : public game_logic::IPlayer
 {
 public:
-  HumanPlayer(util::MoveType move) : game::IPlayer(move) {}
+  HumanPlayer(game_logic::MoveType move) : game_logic::IPlayer(move) {}
   void InterruptGame() {
     std::lock_guard<std::mutex> _(mtx_);
     stop_game_ = true;
     cv_.notify_one();
   }
-  std::pair<int, int> FindNextPosition(util::board_type &arr) override;
+  std::pair<int, int> FindNextPosition(game_logic::board_type &arr) override;
   void UpdatePosition(int x, int y);
 
 private:

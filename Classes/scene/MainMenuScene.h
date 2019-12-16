@@ -9,7 +9,7 @@ USING_NS_CC;
 
 USING_NS_CC_EXT;
 using namespace ui;
-
+namespace game_scene {
 class MainMenuScene : public cocos2d::Layer
 {
 public:
@@ -21,3 +21,4 @@ public:
 private:
   void touchEvent(Ref *sender, Widget::TouchEventType type);
 };
+}// namespace game_scene
