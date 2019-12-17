@@ -18,3 +18,4 @@ pipelines:
           - cd build
           - cmake .. -DUNITTEST=1
           - make
+          - ./Classes/game_logic/test/unittest_exec
