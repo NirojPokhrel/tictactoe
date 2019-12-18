@@ -12,10 +12,7 @@ void FillGameBoard(game_logic::board_type &brd, MoveType init_item) {
 }
 
 inline bool CheckForEquality(MoveType val1, MoveType val2, MoveType val3, MoveType empty_type) {
-  if (empty_type != val1 && val1 == val2 && val1 == val3) {
-    return true;
-  }
-  return false;
+  return empty_type != val1 && val1 == val2 && val1 == val3;
 }
 
 inline void SetWinningPosition(std::pair<int, int> &&p0, std::pair<int, int> &&p1, std::pair<int, int> &&p2, VectorOfPairs *win_pos) {
@@ -77,44 +74,44 @@ bool CheckIfFull(const board_type &game_board, MoveType empty_id) {
   return true;
 }
 
-inline int CheckHorizontal(const board_type &game_board, int x, int y, MoveType empty_id) {
+inline int CheckHorizontal(const board_type &game_board, int64_t x, int64_t y, MoveType empty_id) {
   int empty_cell = 0;
   for (int i = -2; i <= 2; ++i) {
     if ((x + i) >= 0 && (x + i) <= 2
-        && game_board[static_cast<unsigned long>(x + i)][static_cast<unsigned long>(y)] == empty_id) {
+        && game_board[static_cast<uint64_t>(x + i)][static_cast<uint64_t>(y)] == empty_id) {
       empty_cell++;
     }
   }
   return empty_cell;
 }
 
-inline int CheckVeritcal(const board_type &game_board, int x, int y, MoveType empty_id) {
+inline int CheckVeritcal(const board_type &game_board, int64_t x, int64_t y, MoveType empty_id) {
   int empty_cell = 0;
   for (int i = -2; i <= 2; ++i) {
     if ((y + i) >= 0 && (y + i) <= 2
-        && game_board[static_cast<unsigned long>(x)][static_cast<unsigned long>(y + i)] == empty_id) {
+        && game_board[static_cast<uint64_t>(x)][static_cast<uint64_t>(y + i)] == empty_id) {
       empty_cell++;
     }
   }
   return empty_cell;
 }
 
-inline int CheckDiagnoal(const board_type &game_board, int x, int y, MoveType empty_id) {
+inline int CheckDiagnoal(const board_type &game_board, int64_t x, int64_t y, MoveType empty_id) {
   int empty_cell = 0;
   for (int i = -2; i <= 2; ++i) {
     if ((x + i) >= 0 && (x + i) <= 2 && (y + i) >= 0 && (y + i) <= 2
-        && game_board[static_cast<unsigned int>(x + i)][static_cast<unsigned int>(y + i)] == empty_id) {
+        && game_board[static_cast<uint64_t>(x + i)][static_cast<uint64_t>(y + i)] == empty_id) {
       empty_cell++;
     }
   }
   return empty_cell;
 }
 
-inline int CheckRevDiagnoal(const board_type &game_board, int x, int y, MoveType empty_id) {
+inline int CheckRevDiagnoal(const board_type &game_board, int64_t x, int64_t y, MoveType empty_id) {
   int empty_cell = 0;
   for (int i = 0; i <= 5; ++i) {
     if ((x + i - 2) >= 0 && (x + i - 2) <= 2 && (y - i + 2) >= 0 && (y - i + 2) <= 2
-        && game_board[static_cast<unsigned int>(x + i - 2)][static_cast<unsigned int>(y - i + 2)] == empty_id) {
+        && game_board[static_cast<uint64_t>(x + i - 2)][static_cast<uint64_t>(y - i + 2)] == empty_id) {
       empty_cell++;
     }
   }
