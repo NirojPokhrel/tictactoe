@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#IF THE REPO IS DIRTY MAKE SURE TO STASH IT BEFORE PUSHING
+GIT_STASH=0
+if [ ! -z "$(git status --untracked-files=no --porcelain)" ]; then 
+	# Working directory not clean excluding untracked files
+	git stash
+	GIT_STASH=1
+fi
+echo `pwd`
+mkdir -p build
+pushd build
+cmake .. -DCLANGTIDY=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cp ../.clang-tidy .
+run-clang-tidy-6.0.py > error 2>&1
+OUTPUT=`cat error | grep "treated as error" | awk '{s+=$1} END {print s}'`
+popd
+if [ "$OUTPUT" != "" ]; then
+	echo "CLANG-TIDY error. Fix the errors before trying to push" >&2
+	echo "Output Value : $OUTPUT"
+fi
+if [ "$GIT_STASH" == "1" ]; then
+	git stash pop
+fi
+exit $OUTPUT

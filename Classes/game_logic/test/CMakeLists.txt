@@ -4,6 +4,22 @@ add_library(logic_lib
                 ../GameLogic.cc
                 ../HumanPlayer.cpp)
 
+target_compile_options(logic_lib PRIVATE -Wall 
+                -Wextra 
+                -Wunused 
+                -Wuninitialized 
+                -Wmissing-noreturn 
+                -Wunreachable-code
+                -Wsign-compare 
+                #-Wstrict-null-sentinel 
+                -Wreturn-type 
+                -Wcast-qual 
+                -Wconversion
+                -Wenum-compare 
+                -Wsign-conversion)
+if (CLANGTIDY)
+    return()
+endif()                
 add_executable(unittest_exec
     GameTest.cpp
     GameLogicTest.cpp
@@ -14,21 +30,7 @@ if (SANITIZER)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -fsanitize=${SANITIZER})
     set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} -fsanitize=${SANITIZER})
     set(CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=${SANITIZER})
-endif()
-
-target_compile_options(logic_lib PRIVATE -Wall 
-                                         -Wextra 
-                                         -Wunused 
-                                         -Wuninitialized 
-                                         -Wmissing-noreturn 
-                                         -Wunreachable-code
-                                         -Wsign-compare 
-                                         -Wstrict-null-sentinel 
-                                         -Wreturn-type 
-                                         -Wcast-qual 
-                                         -Wconversion
-                                         -Wenum-compare 
-                                         -Wsign-conversion)        
+endif()        
 
 target_link_libraries(unittest_exec ${GTEST_STATIC_LIBRARIES} pthread logic_lib)
 find_library (LIBRARY_EXISTS

@@ -30,7 +30,7 @@ set(APP_NAME tictactoe)
 project(${APP_NAME})
 
 ########### Prepare only unittests ##################
-if (UNITTEST)
+if (UNITTEST OR CLANGTIDY)
     include (cmake/gmock_init.cmake)
     include_directories (${GTEST_INCLUDE_DIRS})
     include_directories (${GMOCK_INCLUDE_DIRS})

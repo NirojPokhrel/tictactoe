@@ -2,7 +2,6 @@
 #include "GameUtil.h"
 #include <algorithm>
 #include <functional>
-#include <iostream>
 
 using game_logic::AITicTacToe;
 
@@ -71,7 +70,7 @@ int AITicTacToe::BuildGameTree(game_logic::board_type &arr, bool maximizing_play
   }
 }
 
-int AITicTacToe::TraverseBreadth(game_logic::board_type &arr, bool is_maximizing, std::function<int(int, int)> func, int depth) {
+int AITicTacToe::TraverseBreadth(game_logic::board_type &arr, bool is_maximizing, const std::function<int(int, int)> &func, int depth) {
   int value = is_maximizing ? -100 : 100;
   for (uint8_t i = 0; i < 3; ++i) {
     for (uint8_t j = 0; j < 3; ++j) {

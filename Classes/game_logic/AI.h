@@ -25,7 +25,7 @@ public:
 
 private:
   int BuildGameTree(game_logic::board_type &arr, bool maximizing_player, int depth);
-  int TraverseBreadth(game_logic::board_type &arr, bool is_maximizing, std::function<int(int, int)> func, int depth);
+  int TraverseBreadth(game_logic::board_type &arr, bool is_maximizing, const std::function<int(int, int)> &func, int depth);
 
   game_logic::MoveType ai_;// identification for ai player in game array
   game_logic::MoveType player_;// identification for human player
