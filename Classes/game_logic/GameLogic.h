@@ -5,6 +5,7 @@
 #include <atomic>
 #include <functional>
 #include <future>
+#include <mutex>
 
 namespace game_logic {
 using callback_type = std::function<void(uint8_t x, uint8_t y, game_logic::MoveType move)>;
@@ -31,7 +32,8 @@ public:
 private:
   void RunGameLogic();
   bool MakeMove(game_logic::IPlayer* player);
-  game_logic::board_type game_;// 3x3 game board
+  mutable std::mutex data_mtx_;
+  game_logic::board_type game_;// 3x3 game board, cross-thread, needs protection
   game_logic::IPlayer* p1_;// player 1
   game_logic::IPlayer* p2_;// player 2
   std::atomic<bool> game_started_{ false };

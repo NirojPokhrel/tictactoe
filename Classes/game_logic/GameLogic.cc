@@ -4,6 +4,7 @@
 using game_logic::GameLogic;
 
 void GameLogic::InitGame() {
+  std::lock_guard<std::mutex> lk(data_mtx_);
   game_logic::FillGameBoard(game_, game_logic::MoveType::kEmpty);
 }
 
@@ -34,24 +35,31 @@ void GameLogic::StopGame() {
 }
 
 bool GameLogic::MakeMove(game_logic::IPlayer* player) {
-  auto position = static_cast<std::pair<uint8_t, uint8_t>>(player->FindNextPosition(game_));
-  if (position.first == 255 || position.second == 255 || game_[position.first][position.second] != game_logic::MoveType::kEmpty) {
+  std::unique_lock<std::mutex> lk(data_mtx_);
+  auto board_copy = game_;
+  lk.unlock();
+  auto position = static_cast<std::pair<uint8_t, uint8_t>>(player->FindNextPosition(board_copy));
+  if (position.first == 255 || position.second == 255 || board_copy[position.first][position.second] != game_logic::MoveType::kEmpty) {
     return false;
   }
   ui_callback_(position.first, position.second, player->GetMoveType());
+  lk.lock();
   game_[position.first][position.second] = player->GetMoveType();
   return true;
 }
 
 game_logic::MoveType GameLogic::Winner(game_logic::VectorOfPairs* win_pos) const {
+  std::lock_guard<std::mutex> lk(data_mtx_);
   return game_logic::IsGameOver(game_, game_logic::MoveType::kEmpty, win_pos);
 }
 
 bool GameLogic::IsGameDraw() const {
+  std::lock_guard<std::mutex> lk(data_mtx_);
   return game_logic::IsGameOver(game_, game_logic::MoveType::kEmpty) == game_logic::MoveType::kEmpty
          && game_logic::CheckIfFull(game_, game_logic::MoveType::kEmpty);
 }
 
 bool GameLogic::IsPositionEmpty(int x, int y) const {
+  std::lock_guard<std::mutex> lk(data_mtx_);
   return game_[static_cast<uint8_t>(x)][static_cast<uint8_t>(y)] == game_logic::MoveType::kEmpty;
 }

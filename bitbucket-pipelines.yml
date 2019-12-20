@@ -10,12 +10,18 @@ pipelines:
     - step:
         script:
           - uname -a
-          - gcc --version
           - apt-get update -qq
+          - apt install build-essential
           - apt-get install cmake -y
           - cmake --version
           - mkdir -p build
           - cd build
-          - cmake .. -DUNITTEST=1
-          - make
+          - cmake .. -DUNITTEST=ON -DCLANGTIDY=OFF -DSANITIZER=address
+          - make unittest_exec
+          - ./Classes/game_logic/test/unittest_exec
+          - cmake .. -DUNITTEST=ON -DCLANGTIDY=OFF -DSANITIZER=thread
+          - make unittest_exec
+          - ./Classes/game_logic/test/unittest_exec
+          - cmake .. -DUNITTEST=ON -DCLANGTIDY=OFF -DSANITIZER=undefined
+          - make unittest_exec
           - ./Classes/game_logic/test/unittest_exec
