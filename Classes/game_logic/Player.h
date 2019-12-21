@@ -4,6 +4,8 @@
 #include <utility>
 
 namespace game_logic {
+/// Player interface - It can be inherited by two human players or between an AI and human players,
+///                    or between two AI.
 class IPlayer
 {
 public:
